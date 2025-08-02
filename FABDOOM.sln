@@ -1,44 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.36128.20
+VisualStudioVersion = 16.0.33801.447
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fabdoom", "fabdoom.vcxproj", "{DD608F35-E918-4FCB-B73C-CEA3C9C39434}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "r_d3d", "WIN32\R_D3D\r_d3d.vcxproj", "{EE84ABF8-E500-4AE7-8346-3C2C74A845AC}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "r_glide", "WIN32\R_GLIDE\r_glide.vcxproj", "{8BAB366D-5912-477C-A5E5-1E61999D9A8F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fabdoom", "FABDOOM.vcxproj", "{8DB52FB0-BC97-4DA8-847F-A2C511BBDB26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
-		Template|x86 = Template|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DD608F35-E918-4FCB-B73C-CEA3C9C39434}.Debug|x86.ActiveCfg = Debug|Win32
-		{DD608F35-E918-4FCB-B73C-CEA3C9C39434}.Debug|x86.Build.0 = Debug|Win32
-		{DD608F35-E918-4FCB-B73C-CEA3C9C39434}.Release|x86.ActiveCfg = Release|Win32
-		{DD608F35-E918-4FCB-B73C-CEA3C9C39434}.Release|x86.Build.0 = Release|Win32
-		{DD608F35-E918-4FCB-B73C-CEA3C9C39434}.Template|x86.ActiveCfg = Debug|Win32
-		{DD608F35-E918-4FCB-B73C-CEA3C9C39434}.Template|x86.Build.0 = Debug|Win32
-		{EE84ABF8-E500-4AE7-8346-3C2C74A845AC}.Debug|x86.ActiveCfg = Debug|Win32
-		{EE84ABF8-E500-4AE7-8346-3C2C74A845AC}.Debug|x86.Build.0 = Debug|Win32
-		{EE84ABF8-E500-4AE7-8346-3C2C74A845AC}.Release|x86.ActiveCfg = Release|Win32
-		{EE84ABF8-E500-4AE7-8346-3C2C74A845AC}.Release|x86.Build.0 = Release|Win32
-		{EE84ABF8-E500-4AE7-8346-3C2C74A845AC}.Template|x86.ActiveCfg = Template|Win32
-		{EE84ABF8-E500-4AE7-8346-3C2C74A845AC}.Template|x86.Build.0 = Template|Win32
-		{8BAB366D-5912-477C-A5E5-1E61999D9A8F}.Debug|x86.ActiveCfg = Debug|Win32
-		{8BAB366D-5912-477C-A5E5-1E61999D9A8F}.Debug|x86.Build.0 = Debug|Win32
-		{8BAB366D-5912-477C-A5E5-1E61999D9A8F}.Release|x86.ActiveCfg = Release|Win32
-		{8BAB366D-5912-477C-A5E5-1E61999D9A8F}.Release|x86.Build.0 = Release|Win32
-		{8BAB366D-5912-477C-A5E5-1E61999D9A8F}.Template|x86.ActiveCfg = Template|Win32
-		{8BAB366D-5912-477C-A5E5-1E61999D9A8F}.Template|x86.Build.0 = Template|Win32
+		{8DB52FB0-BC97-4DA8-847F-A2C511BBDB26}.Debug|x86.ActiveCfg = Debug|Win32
+		{8DB52FB0-BC97-4DA8-847F-A2C511BBDB26}.Debug|x86.Build.0 = Debug|Win32
+		{8DB52FB0-BC97-4DA8-847F-A2C511BBDB26}.Release|x86.ActiveCfg = Release|Win32
+		{8DB52FB0-BC97-4DA8-847F-A2C511BBDB26}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {5CF065D0-423E-46DD-82B7-C090E4EE7B47}
+		SolutionGuid = {A5463748-2957-48AF-AC80-7A5C4B7FC880}
 	EndGlobalSection
 EndGlobal

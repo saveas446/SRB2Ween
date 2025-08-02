@@ -11,14 +11,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
+    <ProjectName>fabdoom</ProjectName>
     <SccProjectName />
     <SccLocalPath />
-    <ProjectGuid>{DD608F35-E918-4FCB-B73C-CEA3C9C39434}</ProjectGuid>
+    <ProjectGuid>{8DB52FB0-BC97-4DA8-847F-A2C511BBDB26}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -42,12 +44,17 @@
     <OutDir>.\Debug\</OutDir>
     <IntDir>.\Debug\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\Games\SRB2\rsrc 3dfx_headers;D:\Games\SRB2\rsrc dxsdk\sdk\inc;$(IncludePath)</IncludePath>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules />
+    <CodeAnalysisRuleAssemblies />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>.\Release\</OutDir>
     <IntDir>.\Release\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules />
+    <CodeAnalysisRuleAssemblies />
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -57,18 +64,20 @@
       <Optimization>Disabled</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;__WIN32__;__MSC__;USEASM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_WINDOWS;__WIN32__;__MSC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
-      <PrecompiledHeaderOutputFile>.\Debug\fabdoom.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>.\Debug\FABDOOM.pch</PrecompiledHeaderOutputFile>
       <ObjectFileName>.\Debug\</ObjectFileName>
       <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <TypeLibraryName>.\Debug\fabdoom.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug\FABDOOM.tlb</TypeLibraryName>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <RedirectOutputAndErrors>NUL</RedirectOutputAndErrors>
       <TargetEnvironment>Win32</TargetEnvironment>
@@ -79,15 +88,28 @@
     </ResourceCompile>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Debug\fabdoom.bsc</OutputFile>
+      <OutputFile>.\Debug\FABDOOM.bsc</OutputFile>
     </Bscmake>
     <Link>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>e:\jeux\doom2\fabdoom.exe</OutputFile>
-      <AdditionalDependencies>dxguid.lib;dinput.lib;dsound.lib;ddraw.lib;winmm.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dinput8.lib;dxguid.lib;dsound.lib;ddraw.lib;winmm.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+      <Message />
+    </CustomBuildStep>
+    <CustomBuild>
+      <Command>nasm -g -o $(IntDir)%(Filename).obj -f win32 "%(FullPath)"</Command>
+    </CustomBuild>
+    <CustomBuild>
+      <Message>Compiling $(Filename).nas with NASM...</Message>
+    </CustomBuild>
+    <CustomBuild>
+      <Outputs>$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+    </CustomBuild>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -98,17 +120,19 @@
       <Optimization>MaxSpeed</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;__WIN32__;__MSC__;USEASM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;__WIN32__;__MSC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
       <BrowseInformation>true</BrowseInformation>
-      <PrecompiledHeaderOutputFile>.\Release\fabdoom.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>.\Release\FABDOOM.pch</PrecompiledHeaderOutputFile>
       <ObjectFileName>.\Release\</ObjectFileName>
       <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <TypeLibraryName>.\Release\fabdoom.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Release\FABDOOM.tlb</TypeLibraryName>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <RedirectOutputAndErrors>NUL</RedirectOutputAndErrors>
       <TargetEnvironment>Win32</TargetEnvironment>
@@ -119,27 +143,29 @@
     </ResourceCompile>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Release\fabdoom.bsc</OutputFile>
+      <OutputFile>.\Release\FABDOOM.bsc</OutputFile>
     </Bscmake>
     <Link>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>e:\jeux\doom2\windoom3.exe</OutputFile>
-      <AdditionalDependencies>dxguid.lib;dinput.lib;dsound.lib;ddraw.lib;winmm.lib;wsock32.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxguid.lib;dinput8.lib;dsound.lib;ddraw.lib;winmm.lib;wsock32.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-  </ItemDefinitionGroup>
-  <ItemGroup>
-    <CustomBuild Include="tmap.nas">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">nasmw -o $(IntDir)%(Filename).obj -f win32 %(FullPath)</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling with NASM...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)/$(InputName).obj;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">nasmw -o $(IntDir)%(Filename).obj -f win32 %(FullPath)</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling with NASM...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)/$(InputName).obj;%(Outputs)</Outputs>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+      <Message />
+    </CustomBuildStep>
+    <CustomBuild>
+      <Command>nasm -g -o $(IntDir)%(Filename).obj -f win32 "%(FullPath)"</Command>
     </CustomBuild>
-    <CustomBuild Include="win32\dlcursor.cur" />
-  </ItemGroup>
+    <CustomBuild>
+      <Message>Compiling $(Filename).nas with NASM...</Message>
+    </CustomBuild>
+    <CustomBuild>
+      <Outputs>$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Am_map.c" />
     <ClCompile Include="Command.c" />
@@ -163,7 +189,9 @@
     <ClCompile Include="M_argv.c" />
     <ClCompile Include="M_bbox.c" />
     <ClCompile Include="M_cheat.c" />
-    <ClCompile Include="M_fixed.c" />
+    <ClCompile Include="M_fixed.c">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;__WIN32__;__MSC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
     <ClCompile Include="M_menu.c" />
     <ClCompile Include="M_misc.c" />
     <ClCompile Include="M_random.c" />
@@ -192,10 +220,6 @@
     <ClCompile Include="R_bsp.c" />
     <ClCompile Include="R_data.c" />
     <ClCompile Include="R_draw.c" />
-    <ClCompile Include="R_draw16.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="R_draw8.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -215,7 +239,6 @@
     <ClCompile Include="V_video.c" />
     <ClCompile Include="win32\dx_error.c" />
     <ClCompile Include="win32\fabdxlib.c" />
-    <ClCompile Include="win32\hwr_main.c" />
     <ClCompile Include="win32\Mid2strm.c" />
     <ClCompile Include="win32\win_cd.c" />
     <ClCompile Include="win32\win_dbg.c" />
@@ -303,10 +326,6 @@
     <ClInclude Include="Vid_copy.h" />
     <ClInclude Include="V_video.h" />
     <ClInclude Include="win32\fabdxlib.h" />
-    <ClInclude Include="win32\hwr_data.h" />
-    <ClInclude Include="win32\hwr_defs.h" />
-    <ClInclude Include="win32\hwr_drv.h" />
-    <ClInclude Include="win32\hwr_main.h" />
     <ClInclude Include="win32\Mid2strm.h" />
     <ClInclude Include="win32\win_dbg.h" />
     <ClInclude Include="win32\win_dll.h" />
@@ -324,12 +343,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="_logs\3dfxtodo.txt">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </Text>
-    <Text Include="_logs\3dfx_log.txt">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </Text>
     <Text Include="_logs\log.txt" />
     <Text Include="_logs\Logboris.txt" />
     <Text Include="_logs\tokin.txt" />
