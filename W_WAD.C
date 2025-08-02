@@ -19,8 +19,6 @@
 #include "i_video.h"        //rendermode
 #include "d_netfil.h"
 
-
-
 //===========================================================================
 //                                                                    GLOBALS
 //===========================================================================
@@ -73,7 +71,7 @@ int W_LoadWadFile (char *filename)
     int              i;
     struct stat      bufstat;
     time_t           timestamp;
-    GlidePatch_t*    grPatch;
+//    GlidePatch_t*    grPatch;
 
     //
     // check if limit of active wadfiles
@@ -581,12 +579,22 @@ void* W_CacheLumpName ( char*         name,
     return W_CacheLumpNum (W_GetNumForName(name), tag);
 }
 
-//void* W_CachePatchName ( char*   name,
-//                         int     tag )
-//{
-//    return W_CachePatchNum (W_GetNumForName(name), tag);
-//}
 
+
+// ==========================================================================
+//                                         CACHING OF GRAPHIC PATCH RESOURCES
+// ==========================================================================
+
+// Graphic 'patches' are loaded, and if necessary, converted into the format
+// the most useful for the current rendermode. For software renderer, the
+// graphic patches are kept as is. For the 3Dfx renderer, graphic patches
+// are 'unpacked', and are kept into the cache in that unpacked format, the
+// heap memory cache then act as a 'level 2' cache just after the graphics
+// card memory.
+
+//
+// Cache a patch into heap memory, convert the patch format as necessary
+//
 
 // --------------------------------------------------------------------------
 // W_Profile

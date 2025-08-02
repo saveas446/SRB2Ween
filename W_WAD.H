@@ -57,7 +57,8 @@ typedef struct
 #define LUMPNUM(lump)          (lump&0xffff)    // lump number for this pwad
 
 #define MAX_WADPATH   128
-#define MAX_WADFILES  32       // maximum of wad files used at the same time
+#define MAX_WADFILES  256      // Saxman - 02/13/2000
+                               // maximum of wad files used at the same time
                                // (there is a max of simultaneous open files
                                // anyway, and this should be plenty)
 

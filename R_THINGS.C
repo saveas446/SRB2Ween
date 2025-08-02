@@ -370,10 +370,14 @@ void R_InitSprites (char** namelist)
     //
     // count the number of sprite names, and allocate sprites table
     //
-    check = namelist;
-    while (*check != NULL)
-        check++;
-    numsprites = check - namelist;
+
+    //check = namelist;
+    //while (*check != NULL)
+    //    check++;
+    //numsprites = check - namelist;
+
+    // The previous code made it think there were more sprites than there actually were, so here's this instead
+    numsprites = NUMSPRITES;
 
     if (!numsprites)
         I_Error ("R_AddSpriteDefs: no sprites in namelist\n");
