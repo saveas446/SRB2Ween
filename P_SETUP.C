@@ -23,7 +23,6 @@
 
 #ifdef __WIN32__
 #include "malloc.h"
-#include "win32/hwr_main.h"
 #include "i_video.h"    //rendermode
 #include "math.h"
 #endif
@@ -877,11 +876,6 @@ boolean P_SetupLevel (int           episode,
     for(i = 0; i < numsectors; i++)
       P_RingSector(&sectors[i]);
 
-#ifdef __WIN32__
-    if (rendermode != render_soft)
-        HWR_CreatePlanePolygons (numnodes-1);
-#endif
-
     bodyqueslot = 0;
     deathmatch_p = deathmatchstarts;
     // added 25-4-98 : reset the players starts
@@ -925,12 +919,6 @@ boolean P_SetupLevel (int           episode,
         I_PlayCD (map, true);                // Doom2, 32 maps
     else
         I_PlayCD ((episode-1)*9+map, true);  // Doom1, 9maps per episode
-
-    // preload graphics
-#ifdef __WIN32__
-    if (rendermode != render_soft)
-        HWR_PrepLevelCache (numtextures, numflats+1);
-#endif
 
     if (precache)
         R_PrecacheLevel ();

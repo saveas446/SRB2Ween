@@ -10,10 +10,6 @@
 
 #include "i_video.h"            //rendermode
 
-#ifdef __WIN32__
-#include "win32/hwr_main.h"
-#include "win32/hwr_data.h"
-#endif
 
 // Each screen is [vid.width*vid.height];
 byte*      screens[5];
@@ -207,14 +203,6 @@ void V_DrawMappedPatch ( int           x,
     int         ofs;
     int         colfrac,rowfrac;
 
-    // draw a 3Dfx converted patch
-    #ifdef __WIN32__
-    if ( *(unsigned long *)( ((GlidePatch_t*)patch )->s3Dfx ) == ID_3DFX_PATCH ) {
-        HWR_DrawPatch ((GlidePatch_t*)patch, x, y);
-        return;
-    }
-    #endif
-
     dupx = vid.dupx;
     dupy = vid.dupy;
 
@@ -280,13 +268,6 @@ void V_DrawScaledPatch ( int           x,
     int         ofs;
     int         colfrac,rowfrac;
 
-    // draw a 3Dfx converted patch
-    #ifdef __WIN32__
-    if ( *(unsigned long *)( ((GlidePatch_t*)patch )->s3Dfx ) == ID_3DFX_PATCH ) {
-            HWR_DrawPatch ((GlidePatch_t*)patch, x, y);
-        return;
-    }
-    #endif
 
     dupx = vid.dupx;
     dupy = vid.dupy;
@@ -349,13 +330,7 @@ void V_DrawScaledPatchFlipped ( int           x,
     int         ofs;
     int         colfrac,rowfrac;
 
-    // draw a 3Dfx converted patch
-    #ifdef __WIN32__
-    if ( *(unsigned long *)( ((GlidePatch_t*)patch )->s3Dfx ) == ID_3DFX_PATCH ) {
-            HWR_DrawPatch ((GlidePatch_t*)patch, x, y);
-        return;
-    }
-    #endif
+
 
     dupx = vid.dupx;
     dupy = vid.dupy;
@@ -424,13 +399,7 @@ void V_DrawTranslucentPatch ( int           x,
     int         ofs;
     int         colfrac,rowfrac;
 
-    // draw a 3Dfx converted patch
-    #ifdef __WIN32__
-    if ( *(unsigned long *)( ((GlidePatch_t*)patch )->s3Dfx ) == ID_3DFX_PATCH ) {
-        HWR_DrawPatch ((GlidePatch_t*)patch, x, y);
-        return;
-    }
-    #endif
+
 
     dupx = vid.dupx;
     dupy = vid.dupy;
@@ -497,13 +466,6 @@ void V_DrawTranslationPatch ( int           x,
     byte*       source;
     int         w;
 
-    // draw a 3Dfx converted patch
-    #ifdef __WIN32__
-    if ( *(unsigned long *)( ((GlidePatch_t*)patch )->s3Dfx ) == ID_3DFX_PATCH ) {
-            HWR_DrawPatch ((GlidePatch_t*)patch, x, y);
-        return;
-    }
-    #endif
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
@@ -568,14 +530,6 @@ void V_DrawPatch ( int           x,
     byte*       dest;
     byte*       source;
     int         w;
-
-    // draw a 3Dfx converted patch
-    #ifdef __WIN32__
-    if ( *(unsigned long *)( ((GlidePatch_t*)patch )->s3Dfx ) == ID_3DFX_PATCH ) {
-            HWR_DrawPatch ((GlidePatch_t*)patch, x, y);
-        return;
-    }
-    #endif
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
@@ -645,13 +599,6 @@ V_DrawPatchFlipped
     byte*       source;
     int         w;
 
-    // draw a 3Dfx converted patch
-    #ifdef __WIN32__
-    if ( *(unsigned long *)( ((GlidePatch_t*)patch )->s3Dfx ) == ID_3DFX_PATCH ) {
-            HWR_DrawPatch ((GlidePatch_t*)patch, x, y);
-        return;
-    }
-    #endif
 
     y -= SHORT(patch->topoffset);
     x -= SHORT(patch->leftoffset);
@@ -975,13 +922,6 @@ void V_DrawFadeScreen (void)
     byte        p1, p2, p3, p4;
     byte*       fadetable = (byte *) colormaps + 16*256;
     //short*    wput;
-#ifdef __WIN32__
-
-    if (rendermode!=render_soft) {
-        HWR_FadeScreenMenuBack (0xa0010101, 0);  //faB: hack, 0 means full height :o
-        return;
-    }
-#endif
 
     //if (scr_bpp==1)
     //{

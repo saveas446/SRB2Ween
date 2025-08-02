@@ -25,11 +25,6 @@
 #include "w_wad.h"
 #include "z_zone.h"
 
-#ifdef __WIN32__
-#include "win32/hwr_main.h"
-#endif
-
-
 // coords are scaled
 #define HU_INPUTX       0
 #define HU_INPUTY       0
@@ -764,13 +759,6 @@ void HU_Erase (void)
     }
         con_hudupdate = false;      // if it was set..
     }
-#ifdef __WIN32__
-    else {
-        // refresh just what is needed from the view borders
-        HWR_DrawViewBorder (secondframelines);
-        con_hudupdate = secondframe;
-    }
-#endif
 
 
 //DEBUG
@@ -914,10 +902,6 @@ void HU_drawDeathmatchRankings (void)
 // draw the Crosshair, at the exact center of the view.
 //
 // Crosshairs are pre-cached at HU_Init
-#ifdef __WIN32__
-    extern float gr_basewindowcentery;
-    extern float gr_viewheight;
-#endif
 void HU_drawCrosshair (void)
 {
     int     i;
@@ -927,14 +911,8 @@ void HU_drawCrosshair (void)
     if (!i)
         return;
 
-    if ( rendermode != render_soft ) {
-#ifdef __WIN32__
-        HWR_ScalePatch ( FALSE );
-// #endif
-        y = gr_basewindowcentery;
-    }
-    else
-        y = viewwindowy+(viewheight>>1);
+
+    y = viewwindowy+(viewheight>>1);
 
     V_DrawTranslucentPatch (vid.width>>1, y, 0, crosshair[i-1]);
 
@@ -942,17 +920,8 @@ void HU_drawCrosshair (void)
     {
         if ( rendermode == render_soft )
             y += viewheight;
-#endif
-#ifdef __WIN32__
-        else
-            y += gr_viewheight;
-#endif
         V_DrawTranslucentPatch (vid.width>>1, y, 0, crosshair[i-1]);
     }
-#ifdef __WIN32__
-    if ( rendermode != render_soft )
-        HWR_ScalePatch ( TRUE );
-#endif
 }
 
 

@@ -43,9 +43,6 @@
 #include "p_local.h"
 #include "p_fab.h"
 
-#ifdef __WIN32__
-#include "win32/hwr_main.h"
-#endif
 
 extern boolean          chat_on;         // in heads-up code
 extern byte*            whitemap;        //initted by console
@@ -2114,10 +2111,6 @@ void M_DrawTextBox (int x, int y, int width, int lines)
     // draw middle
     if (rendermode == render_soft)
         V_DrawFlatFill (x+8,y+8,width*8,lines*8,scr_borderpatch);
-#ifdef __WIN32__
-    else
-        HWR_DrawFlatFill (x+8,y+8,width*8,lines*8,st_borderpatchnum);
-#endif
 
     cx += 8;
     while (width > 0)

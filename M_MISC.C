@@ -21,9 +21,7 @@
 #include "d_main.h"
 #include "m_argv.h"
 
-#ifdef __WIN32__
-#include "win32/hwr_main.h"
-#endif
+
 
 // ==========================================================================
 //                         FILE INPUT / OUTPUT
@@ -423,15 +421,6 @@ void M_ScreenShot (void)
     int         i;
     byte*       linear;
     char        lbmname[12];
-
-#ifdef __WIN32__
-    if (rendermode!=render_soft)
-    {
-        HWR_Screenshot ();
-        players[consoleplayer].message = "screen shot";
-        return;
-    }
-#endif
 
     // munge planar buffer to linear
     linear = screens[2];

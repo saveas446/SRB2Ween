@@ -19,11 +19,6 @@
 #include "w_wad.h"
 #include "z_zone.h"
 
-#ifdef __WIN32__
-#include "win32/hwr_main.h"
-#endif
-
-
 // For use if I do walls with outsides/insides
 #define REDS            (256-5*16)
 #define REDRANGE        16
@@ -517,10 +512,6 @@ void AM_LevelInit(void)
 
     if (rendermode == render_soft)
         AM_drawFline = AM_drawFline_soft;
-#ifdef __WIN32__
-    else
-        AM_drawFline = (AMDRAWFLINEFUNC) HWR_drawAMline;
-#endif
 
     AM_clearMarks();
 
@@ -815,10 +806,6 @@ void AM_clearFB(int color)
 {
     if (rendermode == render_soft)
         memset(fb, color, f_w*f_h*vid.bpp);
-#ifdef __WIN32__
-    else
-        HWR_clearAutomap ();
-#endif
 }
 
 

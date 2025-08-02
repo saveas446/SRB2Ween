@@ -866,174 +866,16 @@ static HRESULT SetDIDwordProperty( LPDIRECTINPUTDEVICE pdev,
 }
 
 
+
 // ---------------
 // DIEnumJoysticks
 // There is no such thing as a 'system' joystick, contrary to mouse,
 // we must enumerate and choose one joystick device to use
 // ---------------
-static BOOL CALLBACK DIEnumJoysticks ( LPCDIDEVICEINSTANCE lpddi,
-                                       LPVOID pvRef )   //cv_usejoystick
+static BOOL CALLBACK DIEnumJoysticks(LPCDIDEVICEINSTANCE lpddi,
+    LPVOID pvRef)   //cv_usejoystick
 {
-    LPDIRECTINPUTDEVICE pdev;
-    DIPROPRANGE         diprg;
-    DIDEVCAPS_DX3       caps;
-    BOOL                bUseThisOne = FALSE;
-
-    iJoyNum++;
-
-    //faB: if cv holds a string description of joystick, the value from atoi() is 0
-    //     else, the value was probably set by user at console to one of the previsouly
-    //     enumerated joysticks
-    if ( ((consvar_t *)pvRef)->value == iJoyNum ||
-         !lstrcmp( ((consvar_t *)pvRef)->string, lpddi->tszProductName ) )
-        bUseThisOne = TRUE;
-
-    //CONS_Printf (" cv joy is %s\n", ((consvar_t *)pvRef)->string);
-
-    // print out device name
-    CONS_Printf ("%c%d: %s\n",
-        ( bUseThisOne ) ? '\2' : ' ',   // show name in white if this is the one we will use
-        iJoyNum,
-        //( GET_DIDEVICE_SUBTYPE(lpddi->dwDevType) == DIDEVTYPEJOYSTICK_GAMEPAD ) ? "Gamepad " : "Joystick",
-        lpddi->tszProductName ); // , lpddi->tszInstanceName );
-    
-    // use specified joystick (cv_usejoystick.value in pvRef)
-    if ( !bUseThisOne )
-        return DIENUM_CONTINUE;
-
-    if (lpDI->lpVtbl->CreateDevice (lpDI, &lpddi->guidInstance,
-                                    &pdev, NULL) != DI_OK)
-    {
-        // if it failed, then we can't use this joystick for some
-        // bizarre reason.  (Maybe the user unplugged it while we
-        // were in the middle of enumerating it.)  So continue enumerating
-        CONS_Printf ("DIEnumJoysticks(): CreateDevice FAILED\n");
-        return DIENUM_CONTINUE;
-    }
-
-
-    // get the Device capabilities
-    //
-    caps.dwSize = sizeof(DIDEVCAPS_DX3);
-    if ( FAILED( pdev->lpVtbl->GetCapabilities ( pdev, (DIDEVCAPS*)&caps ) ) )
-    {
-        CONS_Printf ("DIEnumJoysticks(): GetCapabilities FAILED\n");
-        pdev->lpVtbl->Release (pdev);
-        return DIENUM_CONTINUE;
-    }
-    if ( !(caps.dwFlags & DIDC_ATTACHED) )   // should be, since we enumerate only attached devices
-        return DIENUM_CONTINUE;
-    
-    Joystick.bJoyNeedPoll = (( caps.dwFlags & DIDC_POLLEDDATAFORMAT ) != 0);
-
-    if ( caps.dwFlags & DIDC_FORCEFEEDBACK )
-        CONS_Printf ("Sorry, force feedback is not yet supported\n");
-
-    Joystick.bGamepadStyle = ( GET_DIDEVICE_SUBTYPE( caps.dwDevType ) == DIDEVTYPEJOYSTICK_GAMEPAD );
-    //DEBUG CONS_Printf ("Gamepad: %d\n", Joystick.bGamepadStyle);
-
-
-    CONS_Printf ("Capabilities: %d axes, %d buttons, %d POVs\n",
-                 caps.dwAxes, caps.dwButtons, caps.dwPOVs );
-    
-
-    // Set the data format to "simple joystick" - a predefined data format 
-    //
-    // A data format specifies which controls on a device we
-    // are interested in, and how they should be reported.
-    //
-    // This tells DirectInput that we will be passing a
-    // DIJOYSTATE structure to IDirectInputDevice::GetDeviceState.
-    if (pdev->lpVtbl->SetDataFormat (pdev, &c_dfDIJoystick) != DI_OK)
-    {
-        CONS_Printf ("DIEnumJoysticks(): SetDataFormat FAILED\n");
-        pdev->lpVtbl->Release (pdev);
-        return DIENUM_CONTINUE;
-    }
-
-    // Set the cooperativity level to let DirectInput know how
-    // this device should interact with the system and with other
-    // DirectInput applications.
-    if (pdev->lpVtbl->SetCooperativeLevel (pdev, hWndMain,
-                        DISCL_EXCLUSIVE | DISCL_FOREGROUND) != DI_OK)
-    {
-        CONS_Printf ("DIEnumJoysticks(): SetCooperativeLevel FAILED\n");
-        pdev->lpVtbl->Release (pdev);
-        return DIENUM_CONTINUE;
-    }
-
-
-    // set the range of the joystick axis
-    diprg.diph.dwSize       = sizeof(DIPROPRANGE);
-    diprg.diph.dwHeaderSize = sizeof(DIPROPHEADER);
-    diprg.diph.dwHow        = DIPH_BYOFFSET;
-    diprg.lMin              = -JOYAXISRANGE;    // value for extreme left
-    diprg.lMax              = +JOYAXISRANGE;    // value for extreme right
-
-    diprg.diph.dwObj = DIJOFS_X;    // set the x-axis range
-    if (FAILED( pdev->lpVtbl->SetProperty( pdev, DIPROP_RANGE, &diprg.diph ) ) ) {
-        goto SetPropFail;
-    }
-
-    diprg.diph.dwObj = DIJOFS_Y;    // set the y-axis range
-    if (FAILED( pdev->lpVtbl->SetProperty( pdev, DIPROP_RANGE, &diprg.diph ) ) ) {
-SetPropFail:
-        CONS_Printf ("DIEnumJoysticks(): SetProperty FAILED\n");
-        pdev->lpVtbl->Release (pdev);
-        return DIENUM_CONTINUE;
-    }
-
-    diprg.diph.dwObj = DIJOFS_Z;    // set the z-axis range
-    if (FAILED( pdev->lpVtbl->SetProperty( pdev, DIPROP_RANGE, &diprg.diph ) ) ) {
-        CONS_Printf ("DIJOFS_Z not found\n");
-        // set a flag here..
-    }
-
-    diprg.diph.dwObj = DIJOFS_RZ;   // set the rudder range
-    if (FAILED( pdev->lpVtbl->SetProperty( pdev, DIPROP_RANGE, &diprg.diph ) ) )
-    {
-        CONS_Printf ("DIJOFS_RZ (rudder) not found\n");
-        // set a flag here..
-    }
-
-    // set X axis dead zone to 25% (to avoid accidental turning)
-    if ( !Joystick.bGamepadStyle ) {
-        if ( FAILED( SetDIDwordProperty (pdev, DIPROP_DEADZONE, DIJOFS_X,
-                                         DIPH_BYOFFSET, 2500) ) )
-        {
-            CONS_Printf ("DIEnumJoysticks(): couldn't SetProperty for DEAD ZONE\n");
-            //pdev->lpVtbl->Release (pdev);
-            //return DIENUM_CONTINUE;
-        }
-        if (FAILED( SetDIDwordProperty (pdev, DIPROP_DEADZONE, DIJOFS_Y,
-                                        DIPH_BYOFFSET, 2500) ) )
-        {
-            CONS_Printf ("DIEnumJoysticks(): couldn't SetProperty for DEAD ZONE\n");
-            //pdev->lpVtbl->Release (pdev);
-            //return DIENUM_CONTINUE;
-        }
-    }
-
-    // query for IDirectInputDevice2 - we need this to poll the joystick 
-    if ( bDX0300 ) {
-        // we won't use the poll
-        lpDIJ2 = NULL;
-    }
-    else
-    {
-        if (FAILED( pdev->lpVtbl->QueryInterface(pdev, &IID_IDirectInputDevice2,
-                                                 (LPVOID *)&lpDIJ2) ) )
-        {
-            CONS_Printf ("DIEnumJoysticks(): QueryInterface FAILED\n");
-            pdev->lpVtbl->Release (pdev);
-            return DIENUM_CONTINUE;
-        }
-    }
-    
-    // we successfully created an IDirectInputDevice.  So stop looking 
-    // for another one.
-    lpDIJ = pdev;
-    return DIENUM_STOP;
+    return DIENUM_STOP; // Replaced with mar2k version
 }
 
 
@@ -1070,7 +912,8 @@ void I_InitJoystick (void)
 
         CONS_Printf ("Looking for joystick devices:\n");
         iJoyNum = 0;
-        hr = lpDI->lpVtbl->EnumDevices( lpDI, DIDEVTYPE_JOYSTICK, 
+        // Was originally DIDEVTYPE_JOYSTICK
+        hr = lpDI->lpVtbl->EnumDevices( lpDI, 4, 
                                         DIEnumJoysticks,
                                         (void*)&cv_usejoystick,    // our user parameter is joystick number
                                         DIEDFL_ATTACHEDONLY );
@@ -1537,60 +1380,31 @@ int  I_StartupSystem(void)
     sound_started = false;
     timer_started = false;
     cdaudio_started = false;
-        
+
     // check for OS type and version here ?
 #ifdef NDEBUG
     signal(SIGABRT, signal_handler);
-    signal(SIGFPE , signal_handler);
-    signal(SIGILL , signal_handler);
+    signal(SIGFPE, signal_handler);
+    signal(SIGILL, signal_handler);
     signal(SIGSEGV, signal_handler);
     signal(SIGTERM, signal_handler);
-    signal(SIGINT , signal_handler);
+    signal(SIGINT, signal_handler);
 #endif
 
     // create DirectInput - so that I_StartupKeyboard/Mouse can be called later on
     // from D_DoomMain just like DOS version
-    hr = DirectInputCreate (myInstance, DIRECTINPUT_VERSION, &lpDI, NULL);
+    hr = DirectInput8Create(myInstance, DIRECTINPUT_VERSION, &IID_IDirectInput8, (void**)&lpDI, NULL);
 
-    if ( SUCCEEDED( hr ) )
+    if (SUCCEEDED(hr))
         bDX0300 = FALSE;
     else
     {
-        // try opening DirectX3 interface for NT compatibility
-        hr = DirectInputCreate (myInstance, DXVERSION_NTCOMPATIBLE, &lpDI, NULL);
 
-        if ( FAILED ( hr ) )
-        {
-            char* sErr;
-            switch(hr)
-            {
-            case DIERR_BETADIRECTINPUTVERSION:
-                sErr = "DIERR_BETADIRECTINPUTVERSION";
-                break;
-            case DIERR_INVALIDPARAM :
-                sErr = "DIERR_INVALIDPARAM";
-                break;
-            case DIERR_OLDDIRECTINPUTVERSION :
-                sErr = "DIERR_OLDDIRECTINPUTVERSION";
-                break;
-            case DIERR_OUTOFMEMORY :
-                sErr = "DIERR_OUTOFMEMORY";
-                break;
-            default:
-                sErr = "UNKNOWN";
-                break;
-            }
-            I_Error ("Couldn't create DirectInput (reason: %s)", sErr);
-        }
-        else
-            CONS_Printf ("\2Using DirectX3 interface\n");
-
-        // only use DirectInput3 compatible structures and calls
-        bDX0300 = TRUE;
     }
-    I_AddExitFunc (I_ShutdownDirectInput);
+    I_AddExitFunc(I_ShutdownDirectInput);
     return 0;
 }
+
 
 
 //  Closes down everything. This includes restoring the initial

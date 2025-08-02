@@ -25,9 +25,6 @@
 
 #include "z_zone.h"
 
-#ifdef __WIN32__
-#include "win32/hwr_main.h"
-#endif
 
 //protos
 void ST_createWidgets(void);
@@ -900,11 +897,6 @@ void ST_Drawer (boolean fullscreen, boolean refresh)
 
     // Do red-/gold-shifts from damage/items
     ST_doPaletteStuff();
-
-#ifdef __WIN32__
-    if ( rendermode != render_soft )
-        HWR_ScalePatch ( TRUE );
-#endif
     
     if (!cv_splitscreen.value)
     {

@@ -1,6 +1,5 @@
 // win_3dll.c : load and initialise the 3D driver DLL
 
-#include "hwr_drv.h"        // get the standard 3D Driver DLL exports prototypes
 #include "win_dll.h"
 #include "win_main.h"       // I_GetLastErrorMsgBox()
 
@@ -17,19 +16,6 @@ char *va(char *format, ...);
 HINSTANCE hwdInstance = NULL;
 
 loadfunc_t hwdFuncTable[] = {
-    {"_Init@0",            &hwdriver.pfnInit},
-    {"_Shutdown@0",        &hwdriver.pfnShutdown},
-    {"_GetModeList@8",     &hwdriver.pfnGetModeList},
-    {"_SetPalette@4",      &hwdriver.pfnSetPalette},
-    {"_FinishUpdate@0",    &hwdriver.pfnFinishUpdate},
-    {"_DrawLine@8",        &hwdriver.pfnDrawLine},
-    {"_DrawPolygon@12",    &hwdriver.pfnDrawPolygon},
-    {"_GetState@8",        &hwdriver.pfnGetState},
-    {"_SetState@8",        &hwdriver.pfnSetState},
-    {"_ClearBuffer@12",    &hwdriver.pfnClearBuffer},
-    {"_SetTexture@4",      &hwdriver.pfnSetTexture},
-    {"_ReadRect@24",       &hwdriver.pfnReadRect},
-    {"_ClipRect@16",       &hwdriver.pfnClipRect},
     {NULL,NULL}
 };
 

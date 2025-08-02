@@ -15,9 +15,6 @@
 #include "i_video.h"
 #include "m_menu.h"
 
-#ifdef __WIN32__
-#include "win32/hwr_main.h"
-#endif
 
 
 //profile stuff ---------------------------------------------------------
@@ -767,11 +764,6 @@ void R_ExecuteSetViewSize (void)
 
     R_InitTextureMapping ();
 
-#ifdef __WIN32__
-    if (rendermode != render_soft)
-        HWR_InitTextureMapping ();
-#endif
-
     // psprite scales
     centerypsp = viewheight/2;  //added:06-02-98:psprite pos for freelook
 
@@ -827,14 +819,6 @@ void R_ExecuteSetViewSize (void)
             scalelight[i][j] = colormaps + level*256;
         }
     }
-
-    //faB: continue to do the software setviewsize as long as we use
-    //     the reference software view
-#ifdef __WIN32__
-    if (rendermode!=render_soft)
-        HWR_SetViewSize (setblocks);
-#endif
-
 
 }
 

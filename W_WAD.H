@@ -5,11 +5,7 @@
 #ifndef __W_WAD__
 #define __W_WAD__
 
-#ifdef __WIN32__
-#include "win32/hwr_data.h"
-#else
 typedef void GlidePatch_t;
-#endif
 
 #ifdef __GNUG__
 #pragma interface
@@ -108,12 +104,7 @@ void    W_ReadLump (int lump, void *dest);
 void*   W_CacheLumpNum (int lump, int tag);
 void*   W_CacheLumpName (char* name, int tag);
 
-#ifdef __WIN32__
-void*   W_CachePatchNum (int lump, int tag);
-void*   W_CachePatchName (char* name, int tag);
-#else
 #define W_CachePatchNum(lump,tag)    W_CacheLumpNum(lump,tag)
 #define W_CachePatchName(name,tag)   W_CacheLumpName(name,tag)
-#endif
 
 #endif // __W_WAD__

@@ -20,7 +20,6 @@
 
 #ifdef __WIN32__
 #include "win32/win_main.h"
-#include "win32/hwr_main.h"
 void     I_LoadingScreen ( LPCSTR msg );
 #endif
 
@@ -1073,13 +1072,6 @@ static void CON_DrawConsole (void)
     {
         if (rendermode==render_soft)
             CON_DrawBackpic (con_backpic,0,vid.width);   // picture as background
-#ifdef __WIN32__
-        else
-        {
-            unsigned char alpha = (con_curlines * 0x80) / vid.height;
-            HWR_FadeScreenMenuBack ((alpha<<24)|0x101010, con_curlines);
-        }
-#endif
     }
     else
     {
@@ -1091,13 +1083,6 @@ static void CON_DrawConsole (void)
             CON_DrawBackpic (con_bordright,x2,w);
             V_DrawFadeConsBack (w,0,x2,con_curlines);     // translucent background
         }
-#ifdef __WIN32__
-        else
-        {
-            unsigned char alpha = (con_curlines * 0x80) / vid.height;
-            HWR_FadeScreenMenuBack ((alpha<<24)|0x008000, con_curlines);
-        }
-#endif
     }
 
     // draw console text lines from bottom to top
@@ -1145,10 +1130,6 @@ void CON_Drawer (void)
     //Fab: bighack: patch 'I' letter leftoffset so it centers
     hu_font['I'-HU_FONTSTART]->leftoffset = -2;
 
-#ifdef __WIN32__
-    if ( rendermode != render_soft )
-        HWR_ScalePatch ( FALSE );
-#endif
 
     if (con_curlines>0)
         CON_DrawConsole ();
@@ -1157,10 +1138,4 @@ void CON_Drawer (void)
         CON_DrawHudlines ();
 
     hu_font['I'-HU_FONTSTART]->leftoffset = 0;
-
-#ifdef __WIN32__
-    // back to default scaled
-    if ( rendermode != render_soft )
-        HWR_ScalePatch ( TRUE );
-#endif
 }

@@ -62,8 +62,7 @@
 #include "d_main.h"
 
 #ifdef __WIN32__
-#include "win32/hwr_main.h"      // GLIDE View Rendering
-#include "win32/win_main.h"      // GLIDE View Rendering
+#include "WIN32/WIN_MAIN.H"
 #endif
 
 #define BGCOLOR         7
@@ -289,10 +288,6 @@ void D_Display (void)
             gostview=true;
             if ( rendermode == render_soft )
                 R_RenderPlayerView (&players[displayplayer]);
-#ifdef __WIN32__
-            else //if (rendermode != render_soft)
-                HWR_RenderPlayerView (0, &players[displayplayer]);
-#endif
             // added 16-6-98: render the second screen
             if( cv_splitscreen.value )
             {
@@ -308,10 +303,6 @@ void D_Display (void)
                     viewwindowy = 0;
                     memcpy(ylookup,ylookup1,viewheight*sizeof(ylookup[0]));
                 }
-#ifdef __WIN32__
-                else //if (rendermode != render_soft)
-                    HWR_RenderPlayerView (1, &players[secondarydisplayplayer]);
-#endif
             }
         }
 
@@ -364,10 +355,6 @@ void D_Display (void)
         {
             if (rendermode == render_soft)
                 R_DrawViewBorder ();    // erase old menu stuff
-#ifdef __WIN32__
-            else
-                HWR_DrawViewBorder (0);
-#endif
             borderdrawcount--;
         }
 

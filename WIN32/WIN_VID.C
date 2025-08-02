@@ -17,8 +17,6 @@
 #include "win_vid.h"
 
 #include "win_dll.h"        //loading the Glide Render DLL
-#include "hwr_drv.h"        //calling Driver Init & Shutdown
-#include "hwr_main.h"       //calling HWR module Init & Shutdown
 
 
 // -------
@@ -134,13 +132,6 @@ void I_ShutdownGraphics (void)
         bmiMain = NULL;
     }
         
-    if ( rendermode != render_soft )
-    {
-        HWD.pfnShutdown ();     //close 3d card display
-        HWR_Shutdown ();        //free stuff from the hardware renderer
-        Shutdown3DDriver ();  //free the driver DLL
-    }
-    
     // free the last video mode screen buffers
     if (vid.buffer) {
         GlobalFree (vid.buffer);
@@ -266,10 +257,6 @@ void I_FinishUpdate (void)
                            vid.buffer, bmiMain, DIB_RGB_COLORS);
     }
     else
-    if (rendermode != render_soft)
-        HWD.pfnFinishUpdate ();
-    else
-    {
         // DIRECT DRAW
         // copy virtual screen to real screen
         LockScreen();
@@ -284,7 +271,6 @@ void I_FinishUpdate (void)
 
         // swap screens
         ScreenFlip(cv_vidwait.value);
-    }
 }
 
 
@@ -375,11 +361,8 @@ void I_SetPalette (byte* palette)
             c = usegamma[*palette++];
             mainpal[i].peBlue = c;
         }
-
-        if (rendermode != render_soft)
-            HWD.pfnSetPalette (mainpal);     // for palettized textures
-        else
-            SetDDPalette (mainpal);         // set DirectDraw palette
+        
+        SetDDPalette (mainpal);         // set DirectDraw palette
     }
 }
 
@@ -584,35 +567,8 @@ void VID_Init (void)
     bDIBMode = TRUE;
     bAppFullScreen = FALSE;
 
-    // initialize the appropriate display device
-    if ( rendermode != render_soft )
-    {
-        char* drvname;
 
-        switch (rendermode)
-        {
-            case render_glide: drvname = "r_glide.dll"; break;
-            case render_d3d:   drvname = "r_d3d.dll"; break;
-            default: I_Error ("Unknown hardware render mode"); break;
-        }
-        
-        // load the DLL
-        if ( Init3DDriver (drvname) )
-        {
-            // perform initialisations
-            HWD.pfnInit ();
-        }
-        else
-        {
-            rendermode = render_soft;
-            CONS_Printf ("Error initializing Glide, using software mode\n");
-            goto default_render_soft;
-        }
-
-        // get available display modes for the device
-        HWD.pfnGetModeList (&pvidmodes, &numvidmodes);
-    }
-    else if (rendermode == render_soft && !bWinParm )
+    if (bWinParm)
     {
 default_render_soft:        
         if (!CreateDirectDrawInstance ())
@@ -620,7 +576,7 @@ default_render_soft:
         // get available display modes for the device
         VID_GetExtraModes ();
     }
-    else if ( !bWinParm )
+    else
         I_Error ("Invalid render mode\n");
     
     // the game boots in 320x200 standard VGA, but
@@ -828,11 +784,6 @@ int VID_SetMode (int modenum)  //, unsigned char *palette)
         // we switch to fullscreen
         bAppFullScreen = TRUE;
         bDIBMode = FALSE;
-        if ( rendermode != render_soft ) {
-            // purge all patch graphics stored in software format
-            //Z_FreeTags ( PU_PURGELEVEL, PU_PURGELEVEL+100 );
-            HWR_Startup ();
-        }
     }
 
     return 1;

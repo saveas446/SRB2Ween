@@ -19,10 +19,6 @@
 #include "i_video.h"        //rendermode
 #include "d_netfil.h"
 
-#ifdef __WIN32__
-#include "win32/hwr_main.h"
-#include "win32/hwr_data.h"
-#endif
 
 
 //===========================================================================
@@ -174,21 +170,6 @@ int W_LoadWadFile (char *filename)
         I_Error ("Couldn't malloc cache3Dfx\n");
     memset (cache3Dfx, 0, length);
     wadfile->cache3Dfx = cache3Dfx;
-
-#ifdef __WIN32__
-    //faB: now allocates GlidePatch info structures STATIC from the start,
-    //     because these were causing a lot of fragmentation of the heap,
-    //     considering they are never freed.
-    length = numlumps * sizeof(GlidePatch_t);
-    grPatch = Z_Malloc (length, PU_3DFXPATCHINFO, 0);    //never freed
-    memset (grPatch, 0, length);
-    for (i=0; i<numlumps; i++)
-    {
-        //store the software patch lump number for each GlidePatch
-        grPatch[i].patchlump = (numwadfiles<<16) + i;
-        cache3Dfx[i] = &grPatch[i];
-    }
-#endif
 
     //
     //  add the wadfile
@@ -600,142 +581,11 @@ void* W_CacheLumpName ( char*         name,
     return W_CacheLumpNum (W_GetNumForName(name), tag);
 }
 
-
-
-// ==========================================================================
-//                                         CACHING OF GRAPHIC PATCH RESOURCES
-// ==========================================================================
-
-// Graphic 'patches' are loaded, and if necessary, converted into the format
-// the most useful for the current rendermode. For software renderer, the
-// graphic patches are kept as is. For the 3Dfx renderer, graphic patches
-// are 'unpacked', and are kept into the cache in that unpacked format, the
-// heap memory cache then act as a 'level 2' cache just after the graphics
-// card memory.
-
-//
-// Cache a patch into heap memory, convert the patch format as necessary
-//
-
-// Software-only compile cache the data without conversion
-#ifdef __WIN32__
-
-void* W_CachePatchNum ( int    lump,
-                        int    tag )
-{
-    byte*           ptr;
-    lumpcache_t*    lumpcache;
-    GlidePatch_t**  cache3Dfx;
-
-    GlidePatch_t*       grPatch;
-    GlideMipmap_t*      grMipmap;
-
-    // check the return value of a previous W_CheckNumForName()
-    if ( ( lump==-1 ) ||
-         ((lump&0xFFFF) >= wadfiles[lump>>16]->numlumps) )
-        I_Error ("W_CachePatchNum: %i >= numlumps", lump&0xffff);
-
-    lumpcache = wadfiles[lump>>16]->lumpcache;
-    cache3Dfx = wadfiles[lump>>16]->cache3Dfx;
-
-    if (lumpcache[lump&0xFFFF])
-    {
-        //printf ("cache hit on lump %i\n",lump);
-        Z_ChangeTag (lumpcache[lump&0xFFFF],tag);
-        ptr = NULL; //problems with W_CacheLump/W_CachePatch to REMOVE
-    }
-    else
-    {
-        // cache the original 'packed' patch
-        //       the 3Dfx renderer will cache the original when the 3Dfx patch is not made
-        if ( !cache3Dfx[lump&0xffff] ||                 //always true for software-only renderer
-             (!cache3Dfx[lump&0xffff]->mipmap.grInfo.data &&      // converted patch moved off the heap .. AND
-              !cache3Dfx[lump&0xffff]->mipmap.downloaded) )       // .. it moved off the graphics card' memory
-        {
-            // read the lump in
-
-            // if mode is glide, we are going to create the 3Dfx patch
-            // and do Z_Malloc's so better make this one STATIC
-            if (rendermode != render_soft)
-                tag = PU_STATIC;
-
-            //CONS_Printf ("cache miss on lump %i\n",lump);
-            ptr = Z_Malloc (W_LumpLength (lump), tag, &lumpcache[lump&0xFFFF]);
-            W_ReadLumpHeader (lump, lumpcache[lump&0xFFFF], 0);   // read full
-        }
-    }
-
-    // return software patch now
-    if (rendermode == render_soft)
-        return lumpcache[lump&0xffff];
-
-    // check if wascached by W_CacheLump and then by W_CachePath...
-    // TODO: remove when all patch is cached with W_CachePatch
-    if ( !cache3Dfx[lump&0xffff] ||
-         (!cache3Dfx[lump&0xffff]->mipmap.grInfo.data &&
-          !cache3Dfx[lump&0xffff]->mipmap.downloaded) )
-    {
-        // THAT happens if a W_CacheLump () was done before a W_CachePatch for same lump
-        if (!ptr)
-        {
-            //if (lumpcache[lump&0xFFFF])
-            //    Z_Free (lumpcache[lump&0xFFFF]);
-
-            //CONS_Printf ("WARNING cachelump/cachepatch on lump %i\n",lump);
-            ptr = Z_Malloc (W_LumpLength (lump), PU_STATIC, &lumpcache[lump&0xFFFF]);
-            W_ReadLumpHeader (lump, lumpcache[lump&0xFFFF], 0);   // read full
-        }
-    }
-
-    grPatch = cache3Dfx[lump&0xffff];
-
-    // allocate 3Dfx texture cache info
-    if ( !grPatch ) {
-        I_Error ("pas cool mec\n");
-        //grPatch = Z_Malloc (sizeof(GlidePatch_t), PU_3DFXPATCHINFO, 0);    //never freed
-        //memset (grPatch, 0, sizeof(GlidePatch_t));
-        //cache3Dfx[lump&0xffff] = grPatch;
-    }
-
-    grMipmap = &grPatch->mipmap;
-
-    if ( grMipmap->grInfo.data ) {
-        //CONS_Printf ("3Dfx heap cache hit on lump %i\n",lump);
-        Z_ChangeTag (grMipmap->grInfo.data, tag);
-    }
-
-    // download the texture to the graphics card memory
-    if ( !grMipmap->downloaded )
-    {
-        // is the data ready for download ?
-        if (!grMipmap->grInfo.data) {
-            HWR_Make3DfxPatch ( (patch_t*)lumpcache[lump&0xffff], grPatch );
-            // we don't need the original 'packed' format patch,
-            // we keep the _unpacked_ patch in heap memory ( pointed to by cache3Dfx[xx]->grInfo.data )
-            //CONS_Printf ("freeing packed patch\n");
-            Z_Free (ptr);
-        }
-
-        // if the 3Dfx-converted graphics in the heap is flushed, we won't convert it
-        // again, until it is flushed from the 3Dfx memory
-        //HWR_DownloadMipmap (grMipmap);
-    }
-
-    // return GlidePatch_t, which can be casted to (patch_t) with valid patch header info
-    return (void*)grPatch;
-}
-
-
-//
-//
-//
-void* W_CachePatchName ( char*   name,
-                         int     tag )
-{
-    return W_CachePatchNum (W_GetNumForName(name), tag);
-}
-
-#endif //__WIN32__ Glide version
+//void* W_CachePatchName ( char*   name,
+//                         int     tag )
+//{
+//    return W_CachePatchNum (W_GetNumForName(name), tag);
+//}
 
 
 // --------------------------------------------------------------------------

@@ -5,8 +5,6 @@
 
 #include <ddraw.h>
 #include <d3d.h>
-#include <d3drmwin.h>
-#include <d3drm.h>
 #include <dsound.h>
 
 #include "dx_error.h"
@@ -272,32 +270,6 @@ char* DXErrorToString (HRESULT error)
             return "D3DERR_MATERIAL_SETDATA_FAILED";
         case D3DERR_LIGHT_SET_FAILED:
             return "D3DERR_LIGHT_SET_FAILED";
-        case D3DRMERR_BADOBJECT:
-            return "D3DRMERR_BADOBJECT";
-        case D3DRMERR_BADTYPE:
-            return "D3DRMERR_BADTYPE";
-        case D3DRMERR_BADALLOC:
-            return "D3DRMERR_BADALLOC";
-        case D3DRMERR_FACEUSED:
-            return "D3DRMERR_FACEUSED";
-        case D3DRMERR_NOTFOUND:
-            return "D3DRMERR_NOTFOUND";
-        case D3DRMERR_NOTDONEYET:
-            return "D3DRMERR_NOTDONEYET";
-        case D3DRMERR_FILENOTFOUND:
-            return "The file was not found.";
-        case D3DRMERR_BADFILE:
-            return "D3DRMERR_BADFILE";
-        case D3DRMERR_BADDEVICE:
-            return "D3DRMERR_BADDEVICE";
-        case D3DRMERR_BADVALUE:
-            return "D3DRMERR_BADVALUE";
-        case D3DRMERR_BADMAJORVERSION:
-            return "D3DRMERR_BADMAJORVERSION";
-        case D3DRMERR_BADMINORVERSION:
-            return "D3DRMERR_BADMINORVERSION";
-        case D3DRMERR_UNABLETOEXECUTE:
-            return "D3DRMERR_UNABLETOEXECUTE";
 
         //
         // DirectSound errors

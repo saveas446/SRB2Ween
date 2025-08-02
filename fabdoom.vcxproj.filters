@@ -18,9 +18,6 @@
     <ClCompile Include="win32\fabdxlib.c">
       <Filter>win32app</Filter>
     </ClCompile>
-    <ClCompile Include="win32\hwr_main.c">
-      <Filter>win32app</Filter>
-    </ClCompile>
     <ClCompile Include="win32\Mid2strm.c">
       <Filter>win32app</Filter>
     </ClCompile>
@@ -110,7 +107,6 @@
     <ClCompile Include="R_bsp.c" />
     <ClCompile Include="R_data.c" />
     <ClCompile Include="R_draw.c" />
-    <ClCompile Include="R_draw16.c" />
     <ClCompile Include="R_draw8.c" />
     <ClCompile Include="R_main.c" />
     <ClCompile Include="R_plane.c" />
@@ -130,18 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="win32\fabdxlib.h">
-      <Filter>win32app</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\hwr_data.h">
-      <Filter>win32app</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\hwr_defs.h">
-      <Filter>win32app</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\hwr_drv.h">
-      <Filter>win32app</Filter>
-    </ClInclude>
-    <ClInclude Include="win32\hwr_main.h">
       <Filter>win32app</Filter>
     </ClInclude>
     <ClInclude Include="win32\Mid2strm.h">
@@ -246,17 +230,6 @@
     <ClInclude Include="Z_zone.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="win32\winlgcy.rc">
-      <Filter>win32app</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="_logs\3dfx_log.txt">
-      <Filter>Logs</Filter>
-    </Text>
-    <Text Include="_logs\3dfxtodo.txt">
-      <Filter>Logs</Filter>
-    </Text>
     <Text Include="_logs\log.txt">
       <Filter>Logs</Filter>
     </Text>
@@ -269,11 +242,5 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="win32\valve.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="win32\dlcursor.cur">
-      <Filter>win32app</Filter>
-    </CustomBuild>
-    <CustomBuild Include="tmap.nas" />
   </ItemGroup>
 </Project>
