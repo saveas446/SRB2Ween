@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>fabdoom</ProjectName>
+    <ProjectName>fabdoomsdl</ProjectName>
     <SccProjectName />
     <SccLocalPath />
-    <ProjectGuid>{8DB52FB0-BC97-4DA8-847F-A2C511BBDB26}</ProjectGuid>
+    <ProjectGuid>{B906346E-BE9C-4829-89F1-96953DCC1C17}</ProjectGuid>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -120,7 +120,7 @@
       <Optimization>MaxSpeed</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;__WIN32__;SRB2_WIN32;__MSC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;HAVE_SDL;FORCESDLMAIN;NDEBUG;_WINDOWS;__WIN32__;__MSC__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
       <BrowseInformation>true</BrowseInformation>
       <PrecompiledHeaderOutputFile>.\Release\FABDOOM.pch</PrecompiledHeaderOutputFile>
@@ -149,7 +149,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>dxguid.lib;dinput8.lib;dsound.lib;ddraw.lib;winmm.lib;wsock32.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -231,23 +231,20 @@
     <ClCompile Include="r_splats.c" />
     <ClCompile Include="R_things.c" />
     <ClCompile Include="Screen.c" />
+    <ClCompile Include="sdl2\dosstr.c" />
+    <ClCompile Include="sdl2\i_cdmus.c" />
+    <ClCompile Include="sdl2\i_main.c" />
+    <ClCompile Include="sdl2\i_net.c" />
+    <ClCompile Include="sdl2\i_sound.c" />
+    <ClCompile Include="sdl2\i_system.c" />
+    <ClCompile Include="sdl2\i_video.c" />
+    <ClCompile Include="sdl2\Srb2win.c" />
     <ClCompile Include="Sounds.c" />
     <ClCompile Include="St_lib.c" />
     <ClCompile Include="St_stuff.c" />
     <ClCompile Include="S_sound.c" />
     <ClCompile Include="Tables.c" />
     <ClCompile Include="V_video.c" />
-    <ClCompile Include="win32\dx_error.c" />
-    <ClCompile Include="win32\fabdxlib.c" />
-    <ClCompile Include="win32\Mid2strm.c" />
-    <ClCompile Include="win32\win_cd.c" />
-    <ClCompile Include="win32\win_dbg.c" />
-    <ClCompile Include="win32\win_dll.c" />
-    <ClCompile Include="win32\win_main.c" />
-    <ClCompile Include="win32\win_net.c" />
-    <ClCompile Include="win32\win_snd.c" />
-    <ClCompile Include="win32\win_sys.c" />
-    <ClCompile Include="win32\win_vid.c" />
     <ClCompile Include="Wi_stuff.c" />
     <ClCompile Include="W_wad.c" />
     <ClCompile Include="Z_zone.c" />
@@ -318,6 +315,8 @@
     <ClInclude Include="R_state.h" />
     <ClInclude Include="R_things.h" />
     <ClInclude Include="Screen.h" />
+    <ClInclude Include="sdl2\i_main.h" />
+    <ClInclude Include="sdl2\i_video.h" />
     <ClInclude Include="Sounds.h" />
     <ClInclude Include="St_lib.h" />
     <ClInclude Include="St_stuff.h" />
@@ -325,12 +324,6 @@
     <ClInclude Include="Tables.h" />
     <ClInclude Include="Vid_copy.h" />
     <ClInclude Include="V_video.h" />
-    <ClInclude Include="win32\fabdxlib.h" />
-    <ClInclude Include="win32\Mid2strm.h" />
-    <ClInclude Include="win32\win_dbg.h" />
-    <ClInclude Include="win32\win_dll.h" />
-    <ClInclude Include="win32\win_main.h" />
-    <ClInclude Include="win32\win_vid.h" />
     <ClInclude Include="Wi_stuff.h" />
     <ClInclude Include="W_wad.h" />
     <ClInclude Include="Z_zone.h" />

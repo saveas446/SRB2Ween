@@ -879,10 +879,15 @@ void CONS_Printf (char *fmt, ...)
     va_end   (argptr);
 
     // echo console prints to log file
-#ifdef __WIN32__
+#ifdef SRB2_WIN32
     if (logstream != INVALID_HANDLE_VALUE)
         FPrintf (logstream, "%s", txt);     // uses win_dbg.c FPrintf()
 #endif
+
+#ifdef HAVE_SDL
+    I_OutputMsg("%s", txt);
+#endif
+
     if(debugfile)
         fprintf(debugfile,"%s",txt);
 
