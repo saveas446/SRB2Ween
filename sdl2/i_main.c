@@ -1,24 +1,15 @@
 #include "../doomdef.h"
 #include "../d_main.h"
 #include "../m_argv.h"
+#include <SDL.h>
 #include <SDL_rwops.h>
 
 int mb_used = 32;
 
 SDL_RWops* logstream;
 
-int WINAPI WinMain(
-	HINSTANCE hInstance,
-	HINSTANCE hPrevInstance,
-	LPSTR     lpCmdLine,
-	int       nCmdShow)
+int main(int argc, char** argv)
 {
-	int argc;
-	LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
-	if (argv == NULL) {
-		// Handle error
-		return 1;
-	}
 
 	myargc = argc;
 	myargv = argv; /// \todo pull out path to exe from this string
