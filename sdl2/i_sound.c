@@ -17,8 +17,8 @@ Mix_Music* music;
 
 #ifdef HAVE_SDL_MIXER
 CV_PossibleValue_t midibackend_cons_t[] = { {0,"Native"},{1,"FluidSynth"},{0,NULL} };
-consvar_t cv_midibackend = {"midibackend", "Native", "Controls whether SDL2 plays audio using native playback or FluidSynth.", CAT_SOUND, CV_SAVE, midibackend_cons_t, NULL, 0, NULL, NULL};
-consvar_t cv_soundfontpath = {"soundfontpath", "NOT CONFIGURED! Replace this with a path to a .sf2 file.", "Configures FluidSynth's soundfont path.", CAT_SOUND, CV_SAVE, NULL, NULL, 0, NULL, NULL};
+consvar_t cv_midibackend = {"midibackend", "FluidSynth", CV_SAVE, midibackend_cons_t, NULL, 0, NULL, NULL};
+consvar_t cv_soundfontpath = {"soundfontpath", "D:/Documents/GM.sf2", CV_SAVE, NULL, NULL, 0, NULL, NULL};
 #endif
 
 byte sound_started = 0;
